@@ -166,11 +166,11 @@ button{font:inherit;cursor:pointer}
 .item .lb{font-size:12px;line-height:1.2;pointer-events:none}
 .item[aria-pressed="true"]{border-color:var(--gold);background:rgba(224,164,49,.15)}
 .item.none{border-style:dashed}
-.ghost{
+.drag-ghost{
   position:fixed;z-index:50;width:90px;height:90px;pointer-events:none;
   transform:translate(-50%,-50%) scale(1.15);filter:drop-shadow(0 10px 16px rgba(0,0,0,.5))
 }
-.ghost svg{width:100%;height:100%}
+.drag-ghost svg{width:100%;height:100%}
 .swatches{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;align-items:center}
 .swatches .lbl{font-size:13px;color:var(--paper-dim);margin-right:4px}
 .sw{width:30px;height:30px;border-radius:50%;border:3px solid transparent;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.4)}
@@ -721,7 +721,7 @@ function attachDrag(el){
     if(!moved && Math.hypot(dx,dy)>8){
       moved=true;
       if(el.dataset.id){
-        ghost=document.createElement('div'); ghost.className='ghost';
+        ghost=document.createElement('div'); ghost.className='drag-ghost';
         ghost.innerHTML=itemThumb(curSlot, el.dataset.id, me.colors[curSlot]);
         document.body.appendChild(ghost);
       }
