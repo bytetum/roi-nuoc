@@ -709,14 +709,14 @@ function renderTray(){
 
 // Kéo thả bằng Pointer Events (chạm + chuột). Chạm ngắn = mặc luôn.
 function attachDrag(el){
-  let ghost=null, sx=0, sy=0, moved=false, zone=null;
+  let ghost=null, sx=0, sy=0, moved=false, zone=null, active=false;
   el.addEventListener('pointerdown', e=>{
     if(e.button && e.button!==0) return;
-    el.setPointerCapture(e.pointerId);
-    sx=e.clientX; sy=e.clientY; moved=false; zone=document.getElementById('zone');
+    try{ el.setPointerCapture(e.pointerId); }catch{}
+    active=true; sx=e.clientX; sy=e.clientY; moved=false; zone=document.getElementById('zone');
   });
   el.addEventListener('pointermove', e=>{
-    if(!el.hasPointerCapture(e.pointerId)) return;
+    if(!active) return;
     const dx=e.clientX-sx, dy=e.clientY-sy;
     if(!moved && Math.hypot(dx,dy)>8){
       moved=true;
@@ -732,8 +732,8 @@ function attachDrag(el){
     }
   });
   const end = e=>{
-    if(!el.hasPointerCapture(e.pointerId)) return;
-    el.releasePointerCapture(e.pointerId);
+    if(!active) return; active=false;
+    try{ el.releasePointerCapture(e.pointerId); }catch{}
     const z = document.getElementById('zone'); z && z.classList.remove('over');
     if(ghost){ ghost.remove(); ghost=null; }
     const id = el.dataset.id || null;
