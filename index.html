@@ -565,8 +565,7 @@ const ntfyStore = {
   handle(raw){ try{ const ev=JSON.parse(raw); if(ev.event==='message'){ this.apply(JSON.parse(ev.message)); return true; } }catch(e){ console.warn('bad msg', e); } return false; },
   async poll(){
     try{ const r=await fetch(this.base+'/json?poll=1&since=all'); const txt=await r.text();
-      let any=false; txt.split('
-').forEach(l=>{ if(l.trim()) any = this.handle(l) || any; }); this.emit(); }
+      txt.split(/\r?\n/).forEach(l=>{ if(l.trim()) this.handle(l); }); this.emit(); }
     catch(e){ console.warn('poll fail', e); }
   },
   start(){
